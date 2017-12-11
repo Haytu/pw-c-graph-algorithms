@@ -9,7 +9,8 @@
 
 using namespace std;
 
-/* Détermine si a est voisin de b ou non */
+/* Détermine si a est voisin de b ou non.
+* Complexité : O(n-1) */
 bool present(int a, int b, vector<int> voisins[]){
     for(int i = 0; i < voisins[b].size(); i++){
         if(voisins[b][i] == a){
@@ -19,7 +20,8 @@ bool present(int a, int b, vector<int> voisins[]){
     return false;
 }
 
-/* Engendre aléatoirement les listes de voisins d'un graphe aléatoire de n sommets et m arêtes */
+/* Engendre aléatoirement les listes de voisins d'un graphe aléatoire de n sommets et m arêtes.
+* Complexité : O(m) */
 void voisinstrandom(int n, int m, vector<int>voisins[]){
     srand(time(NULL));
     int a, b;
@@ -35,7 +37,8 @@ void voisinstrandom(int n, int m, vector<int>voisins[]){
     }
 }
 
-/* Affiche la liste des voisins de tous les sommets */
+/* Affiche la liste des voisins de tous les sommets.
+* Complexité : O(n+m) */
 void affichage_voisins(int n, vector<int> voisins[]){
     for(int i = 0; i < n; i++){
         cout << "Voisins de " << i << " : ";
@@ -50,7 +53,8 @@ void affichage_voisins(int n, vector<int> voisins[]){
     }
 }
 
-/* Effectue un parcours en largeur. */
+/* Effectue un parcours en largeur.
+* Complexité : O(n+m) */
 void parcourslargeur(int n, vector<int>voisins[], int niveau[], int ordre[], int pere[], int arbre[][2]){
     int x = 0;
     int dv[n] = {0}; /* Sommets déjà vus */
@@ -96,7 +100,8 @@ void parcourslargeur(int n, vector<int>voisins[], int niveau[], int ordre[], int
     }
 }
 
-/* Ecrit le nombre de sommets dans chaque niveau, et le nombre de sommets qui ne sont pas joignable à partir de 0. */
+/* Ecrit le nombre de sommets dans chaque niveau, et le nombre de sommets qui ne sont pas joignable à partir de 0.
+* Complexité : O(n) */
 void ecritureniveaux(int n, int niveau[]){
     int occ[n] = {0}; int cpt = 0;
 
@@ -117,7 +122,8 @@ void ecritureniveaux(int n, int niveau[]){
     cout << "Il y a " << cpt << " sommet(s) qui ne sont pas de la composante de la racine" << endl;
 }
 
-/* Convertit une matrice d'arêtes en tableau de voisins, pour un certain seuil de distance d'arête */
+/* Convertit une matrice d'arêtes en tableau de voisins, pour un certain seuil de distance d'arête.
+* Complexité : O(nm) */
 void edgeToVoisins(int n, int m, int edge[][3], vector<int> voisins[], int seuil){
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
@@ -131,7 +137,8 @@ void edgeToVoisins(int n, int m, int edge[][3], vector<int> voisins[], int seuil
     }
 }
 
-/* Engendre aléatoirement le tableau point */
+/* Engendre aléatoirement le tableau point.
+* Complexité : O(n) */
 void pointrandom(int n, coord point[]){
     srand(time(NULL));
     for(int i = 0; i < n; i++){
@@ -140,7 +147,8 @@ void pointrandom(int n, coord point[]){
     }
 }
 
-/* Engendre le tableau edge de taille m * 3 */
+/* Engendre le tableau edge de taille m * 3.
+* Complexité : O(n*n/2) */
 void distances(int n, int m, coord point[], int edge[][3]){
     int k = 0;
     for(int i = 0; i < n; i++){
@@ -155,7 +163,8 @@ void distances(int n, int m, coord point[], int edge[][3]){
     }
 }
 
-/* Effectue un parcours en profondeur */
+/* Effectue un parcours en profondeur.
+* Complexité : O(n+m) */
 void parcoursprofondeur(int n, vector<int>voisins[], int debut[], int fin[], int pere[], int niveau[]){
     int dv[n] = {0}; /* Sommets deja vus */
     vector<int>AT[n]; int t;
