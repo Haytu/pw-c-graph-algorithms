@@ -7,6 +7,7 @@
 using namespace std;
 typedef struct coord{int abs; int ord;} coord;
 
+/* Complexité : O(n) */
 void pointrandom(int n, coord point[]){
     srand(time(NULL));
     for(int i = 0; i < n; i++){
@@ -15,6 +16,7 @@ void pointrandom(int n, coord point[]){
     }
 }
 
+/* Complexité : O(n*n/2) */
 void voisins(int n, int dmax, coord point[], vector<int> voisin[]){
     for(int i = 0; i < n; i++){
         for(int j = i+1; j < n; j++){
@@ -83,6 +85,7 @@ void AffichageGraphiqueArbre(int n, coord point[], int arbre[][2])       // Cree
     output << endl;
 }
 
+/* Complexité : O(n) */
 int distanceMinimum(int n, int d[], int traite[], int mini){
     int indice = 0;
 
@@ -95,13 +98,15 @@ int distanceMinimum(int n, int d[], int traite[], int mini){
     return indice;
 }
 
+/* Complexité : O(1) */
 int longueur(int x, int y, coord point[]){
     int dist_abs = pow(point[y].abs - point[x].abs, 2);
     int dist_ord = pow(point[y].ord - point[x].ord, 2);
     return sqrt(dist_abs + dist_ord);
 }
 
-/* Algorithme de Dijkstra. */
+/* Algorithme de Dijkstra.
+* Complexité : O(n²) */
 void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
     int d[n]; int racine = 0; int traite[n] = {0};
 
@@ -133,7 +138,8 @@ void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
     }
 }
 
-/* Remplit le tableau arbre avec toutes les arêtes ipere[i]. */
+/* Remplit le tableau arbre avec toutes les arêtes ipere[i].
+* Complexité : O(n) */
 void construireArbre(int n, int arbre[][2], int pere[]){
     int k = 0; // Zero voisins
 
