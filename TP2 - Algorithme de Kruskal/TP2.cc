@@ -7,7 +7,8 @@
 
 using namespace std;
 
-/* Engendre aléatoirement le tableau point */
+/* Engendre aléatoirement le tableau point.
+* Complexité : O(n) */
 void pointrandom(int n, coord point[]){
   srand(time(NULL));
   for(int i = 0; i < n; i++){
@@ -16,7 +17,8 @@ void pointrandom(int n, coord point[]){
   }
 }
 
-/* Engendre le tableau edge de taille m * 3 */
+/* Engendre le tableau edge de taille m * 3.
+* Complexité : O(n*(n/2)) */
 void distances(int n, int m, coord point[], int edge[][3]){
   int k = 0;
   for(int i = 0; i < n; i++){
@@ -31,13 +33,14 @@ void distances(int n, int m, coord point[], int edge[][3]){
   }
 }
 
-/* Trie le tableau edge, selon l'ordre croissant des valeurs de edge[k][2] (Tri à bulles) */
+/* Trie le tableau edge, selon l'ordre croissant des valeurs de edge[k][2] (Tri à bulles).
+* Complexité : O(m²) */
 void tri(int m, int edge[][3]){
   bool trie = false;
 
   while(!trie){
     trie = true;
-    for(int k=0; k<m-1; k++){
+    for(int k = 0; k < m-1; k++){
       if(edge[k][2] > edge[k+1][2]){
         swap(edge[k], edge[k+1]);
         trie = false;
@@ -46,18 +49,19 @@ void tri(int m, int edge[][3]){
   }
 }
 
-/* Optimisation de l'algorithme composante */
+/* Optimisation de l'algorithme composante.
+* Complexité : O(m + n log(n)) */
 void composantes_optimisees(int n, int m, int edge[][3], int comp[]){
   int t[n];
   vector<int> L[n];
 
-  for(int x = 0; x<n; x++){ /*Pour tous les sommets*/
+  for(int x = 0; x < n; x++){ /*Pour tous les sommets*/
     comp[x] = x; /*comp(x) = x*/
     L[comp[x]].push_back(x);
     t[comp[x]] = 1;
   }
 
-  for(int i = 0; i<m; i++){ /*Pour toutes les aretes*/
+  for(int i = 0; i < m; i++){ /*Pour toutes les aretes*/
     if(comp[edge[i][0]] != comp[edge[i][1]]){
       if(t[comp[edge[i][0]]] > t[comp[edge[i][1]]]){
         swap(edge[i][0], edge[i][1]);
@@ -75,19 +79,21 @@ void composantes_optimisees(int n, int m, int edge[][3], int comp[]){
   }
 }
 
-/* Applique l'algorithme de Kruskal au tableau d'arêtes edge et construit le tableau arbre qui contient n-1 arêtes de l'arbre de distance minimum. */
+/* Applique l'algorithme de Kruskal au tableau d'arêtes edge et construit le tableau arbre qui contient n-1 arêtes de l'arbre de distance minimum.
+* Complexité : O(m log(n) + n²) */
 void kruskal(int n, int edge[][3], int arbre[][2]){
   int comp[n]; int m = n*(n-1)/2;
-  for(int x = 0; x<n; x++){ /*Pour tous les sommets*/comp[x] = x; /*comp(x) = x*/}
+  triFusion(edge, m); /* Exercice 6. Complexité : O(m log(n))*/
+  for(int x = 0; x < n; x++){ /*Pour tous les sommets*/comp[x] = x; /*comp(x) = x*/}
   int x = 0;
-  for(int i = 0; i<m; i++){ /*Pour toutes les aretes*/
+  for(int i = 0; i < m; i++){ /*Pour toutes les aretes*/
     if(comp[edge[i][0]] != comp[edge[i][1]]){
       cout << "comp diff" << endl;
       int aux = comp[edge[i][0]];
       arbre[x][0] = edge[i][0];
       arbre[x][1] = edge[i][1];
       x++;
-      for(int z = 0; z<n; z++){
+      for(int z = 0; z < n; z++){
         if(comp[z] == aux){
           comp[z] = comp[edge[i][1]];
         }
@@ -174,7 +180,6 @@ int main(){
   }
 
   //tri(m,edge); /* Exercice 3 */
-  triFusion(edge, m); /* Exercice 6 */
   kruskal(n, edge, arbre); /* Exercice 4 */
 
   /* Affichage des arêtes */
