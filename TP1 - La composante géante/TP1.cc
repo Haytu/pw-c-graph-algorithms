@@ -4,7 +4,8 @@
 
 using namespace std;
 
-/* Engendre aléatoirement le tableau edge en tirant au hasard chacune de ses entrées. */
+/* Engendre aléatoirement le tableau edge en tirant au hasard chacune de ses entrées.
+* Complexité : O(2m) */
 void grapherandom(int n, int m, int edge[][2]){
   for(int i = 0; i < m; i++){ /* Pour toutes les arêtes */
     cout << "{";
@@ -21,7 +22,8 @@ void grapherandom(int n, int m, int edge[][2]){
   cout << endl;
 }
 
-/* Calcule les entrées du tableau comp de telle sorte que comp[i] = comp[j] si et seulement si i et j appartiennent à la même composante connexe de G. */
+/* Calcule les entrées du tableau comp de telle sorte que comp[i] = comp[j] si et seulement si i et j appartiennent à la même composante connexe de G.
+* Complexité : O(n²) */
 void composantes(int n, int m, int edge[][2], int comp[]){
   for(int x = 0; x < n; x++){ /*Pour tous les sommets*/
     comp[x] = x; /* comp(x) = x */
@@ -43,7 +45,8 @@ void composantes(int n, int m, int edge[][2], int comp[]){
   }
 }
 
-/* Ecrit le nombre de points isolés de G (i.e les composantes de taille 1) et les nombres de composantes des autres tailles, dans l'ordre croissant. */
+/* Ecrit le nombre de points isolés de G (i.e les composantes de taille 1) et les nombres de composantes des autres tailles, dans l'ordre croissant.
+* Complexité : O(n) */
 void ecrituretailles(int n, int comp[]) {
   int occ[n] = {0};
   int taille[n+1] = {0};
@@ -87,18 +90,19 @@ void ecrituretailles(int n, int comp[]) {
   }
 }
 
-/* Optimisation de l'algorithme composante */
+/* Optimisation de l'algorithme composante.
+* Complexité : O(m + n log(n)) */
 void composantes_optimisees(int n, int m, int edge[][2], int comp[]){
   int t[n];
   vector<int> L[n];
 
-  for(int x = 0; x<n; x++){ /*Pour tous les sommets*/
+  for(int x = 0; x < n; x++){ /*Pour tous les sommets*/
     comp[x] = x; /*comp(x) = x*/
     L[comp[x]].push_back(x);
     t[comp[x]] = 1;
   }
 
-  for(int i = 0; i<m; i++){ /*Pour toutes les arêtes*/
+  for(int i = 0; i < m; i++){ /*Pour toutes les arêtes*/
     if(comp[edge[i][0]] != comp[edge[i][1]]){
       if(t[comp[edge[i][0]]] > t[comp[edge[i][1]]]){
         swap(edge[i][0], edge[i][1]);
@@ -107,7 +111,7 @@ void composantes_optimisees(int n, int m, int edge[][2], int comp[]){
       int aux = comp[edge[i][0]];
       t[comp[edge[i][1]]] += t[aux];
 
-      while(!L[aux].empty()){
+      while(!L[aux].empty()){ /* Complexité : O(n log(n)) */
         comp[L[aux].back()] = comp[edge[i][1]];
         L[comp[edge[i][1]]].push_back(L[aux].back());
         L[aux].pop_back();
