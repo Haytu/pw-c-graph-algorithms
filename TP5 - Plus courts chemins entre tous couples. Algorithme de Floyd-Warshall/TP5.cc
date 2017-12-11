@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int n = 100;//5 pour le début; //6 pour la fermeture transitive
+const int n = 6;//5 pour le début; //6 pour la fermeture transitive
 const int inf=9999;                    //La valeur infinie.
 
 void floyd_warshall(int longueur[][n], int dist[][n], int chemin[n][n]){
@@ -131,6 +131,46 @@ void graphe_oriente_random(int n, int longueur[][100]){
   }
 }
 
+void compfortconnexe(int fermeture[][n]){
+    vector<int> comp[n];
+    //int comp[n];
+    for(int x = 0; x < n; x++){ /*Pour tous les sommets*/
+      comp[x].push_back(x); /* comp(x) = x */
+    }
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j <n;j++){
+            if(fermeture[i][j] && fermeture[j][i] && i!=j){
+                while(!comp[i].empty()){
+                    int aux = comp[i].back();
+                    comp[j].push_back(aux);
+                    comp[i].pop_back();
+
+                }
+            }
+        }
+    }
+
+    cout << "Composantes fortement connexes : {";
+    for(int i =0; i < n;i++){
+        if(comp[i].size() !=0){
+            cout << "{";
+            for(int j =0; j < comp[i].size();j++){
+                cout << comp[i][j];
+                if(comp[i][j+1]){
+                    cout << ",";
+                }
+            }
+            cout << "}";
+            if(!comp[i+1].empty()){
+                cout << ",";
+            }
+        }
+    }
+    cout << "}" << endl;
+
+}
+
 int main(){
 
   // int longueur[n][n]={{0,2,inf,4,inf}, //Les longueurs des arcs.
@@ -145,7 +185,7 @@ int main(){
 
   int longueur[n][n] = {0};
 
-  graphe_oriente_random(n, longueur);
+  //graphe_oriente_random(n, longueur);
 
   /* Affichage */
   // for(int i = 0; i < 100; i++){
@@ -154,16 +194,16 @@ int main(){
   //   }cout << endl;
   // }
 
-  floyd_warshall(longueur, dist, chemin);
+//  floyd_warshall(longueur, dist, chemin);
 
-  int i, j;
-  cout << "Entrer le départ : ";
-  cin >> i;
+//  int i, j;
+//  cout << "Entrer le départ : ";
+//  cin >> i;
 
-  cout << "Entrer la destination : ";
-  cin >> j;
+//  cout << "Entrer la destination : ";
+//  cin >> j;
 
-  itineraire(i, j, chemin);
+//  itineraire(i, j, chemin);
 
   int arc[n][n]={{0,0,0,1,0,1},//La matrice d'adjacence du graphe oriente D.
   {1,0,1,1,0,0},
@@ -174,6 +214,7 @@ int main(){
   int fermeture[n][n];         // La matrice de la fermeture transitive de D.
 
   fermeture_transitive(arc,fermeture);
+  compfortconnexe(fermeture);
 
   return 0;
 }
