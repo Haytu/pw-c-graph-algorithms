@@ -60,7 +60,7 @@ void parcourslargeur(int n, vector<int>voisins[], int niveau[], int ordre[], int
     int dv[n] = {0}; /* Sommets déjà vus */
 
     for(int i = 0; i < n; i++){
-        niveau[i] = -1;
+        niveau[i] = -1; // sommets non atteints resteront à -1
     }
 
     for(int i = 0; i < n-1; i++){
@@ -76,16 +76,16 @@ void parcourslargeur(int n, vector<int>voisins[], int niveau[], int ordre[], int
     t = 2;
 
     while(AT->size() != 0){
-        int aux = AT->front();
-        AT->pop();
-        for(int i = 0; i < voisins[aux].size(); i++){
+        int aux = AT->front(); // Prend le sommet en première position dans la file
+        AT->pop(); // le retire
+        for(int i = 0; i < voisins[aux].size(); i++){ // Pour tous les voisins de ce sommet choisi
             if(dv[voisins[aux].at(i)] == 0){
                 dv[voisins[aux].at(i)] = 1;
-                AT->push(voisins[aux].at(i));
+                AT->push(voisins[aux].at(i)); // On ajoute le voisin à la file
                 ordre[voisins[aux].at(i)] = t; t++;
                 pere[voisins[aux].at(i)] = aux;
                 niveau[voisins[aux].at(i)] = niveau[aux]+1;
-                arbre[x][0] = aux;
+                arbre[x][0] = aux; // On ajoute l'arrête pour l'arbre en largeur
                 arbre[x][1] = voisins[aux].at(i);
                 cout << "--------------" << endl;
                 cout << "Sommet i: " << voisins[aux].at(i) << endl;
@@ -180,13 +180,13 @@ void parcoursprofondeur(int n, vector<int>voisins[], int debut[], int fin[], int
     t = 2;
 
     while(AT->size() != 0){
-        int x = AT->back();
-        if(voisins[x].size() == 0){
+        int x = AT->back(); // Ici on utilise une pile, on prend le sommet tout en haut de la pile
+        if(voisins[x].size() == 0){ // Si pas/plus de voisins
             AT->pop_back();
             fin[x] = t; t++;
         }
         else{
-            int y = voisins[x].back();
+            int y = voisins[x].back(); // on prend le voisin tout en haut et on le retire
             voisins[x].pop_back();
             if(dv[y] == 0){
                 dv[y] = 1;
@@ -226,26 +226,27 @@ int main(){
     coord point[n];
     int arbre[n-1][2];
 
-    //voisinstrandom(n, m, voisins); /* Exercice 1 */
-    //affichage_voisins(n, voisins);
-
-    //ecritureniveaux(n, niveau); /* Exercice 3 */
-
-    //parcoursprofondeur(n, voisins, debut, fin, pere, niveau); /* Exercice 4 */
-
-    pointrandom(n, point); /* TP2 */
-    distances(n, m, point, edge); /* TP2 */
-    edgeToVoisins(n, m, edge, voisins, 50);
-
-    parcourslargeur(n, voisins, niveau, ordre, pere, arbre); /* Exercice 2 & 5*/
-    /* Affichage de l'ordre */
-    for(int i = 0; i < n; i++){
-          cout << "Ordre : " << ordre[i] << endl;
-    }
-
+    // PARCOURS PROFONDEUR
+    voisinstrandom(n, m, voisins); /* Exercice 1 */
+    affichage_voisins(n, voisins);
+    parcoursprofondeur(n, voisins, debut, fin, pere, niveau); /* Exercice 4 */
     ecritureniveaux(n, niveau); /* Exercice 3 */
 
-    AffichageGraphique(n, point, arbre); /* Exercice 5 */
+
+    // PARCOURS LARGEUR
+    // pointrandom(n, point); /* TP2 */
+    // distances(n, m, point, edge); /* TP2 */
+    // edgeToVoisins(n, m, edge, voisins, 50);
+    //
+    // parcourslargeur(n, voisins, niveau, ordre, pere, arbre); /* Exercice 2 & 5*/
+    // /* Affichage de l'ordre */
+    // for(int i = 0; i < n; i++){
+    //       cout << "Ordre : " << ordre[i] << endl;
+    // }
+    //
+    // ecritureniveaux(n, niveau); /* Exercice 3 */
+    //
+    // AffichageGraphique(n, point, arbre); /* Exercice 5 */
 
     return 0;
 }
