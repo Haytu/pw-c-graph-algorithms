@@ -16,8 +16,8 @@ void pointrandom(int n, coord point[]){
 }
 
 void voisins(int n, int dmax, coord point[], vector<int> voisin[]){
-    for(int i=0; i<n; i++){
-        for(int j=i+1; j<n; j++){
+    for(int i = 0; i < n; i++){
+        for(int j = i+1; j < n; j++){
             int dist_abs = pow(point[j].abs - point[i].abs, 2);
             int dist_ord = pow(point[j].ord - point[i].ord, 2);
             int distance_euclidienne = sqrt(dist_abs + dist_ord);
@@ -83,15 +83,6 @@ void AffichageGraphiqueArbre(int n, coord point[], int arbre[][2])       // Cree
     output << endl;
 }
 
-bool resteATraiter(int n, int traite[]){
-    for(int i = 0; i < n; i++){
-        if(traite[i] == 0){
-            return true;
-        }
-    }
-    return false;
-}
-
 int distanceMinimum(int n, int d[], int traite[], int mini){
     int indice = 0;
 
@@ -110,6 +101,7 @@ int longueur(int x, int y, coord point[]){
     return sqrt(dist_abs + dist_ord);
 }
 
+/* Algorithme de Dijkstra. */
 void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
     int d[n]; int racine = 0; int traite[n] = {0};
 
@@ -119,11 +111,11 @@ void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
     }
     pere[racine] = racine; d[racine] = 0;
 
-    while(resteATraiter(n, traite)){
+    for(int j = 0; j < n; j++){
         int mini = 2147483647;
         int x = distanceMinimum(n, d,traite,mini);
         cout << "x" << " " << x << endl;
-        if(mini != 2147483647){
+        if(x != 2147483647){
             traite[x] = 1;
 
             for(int i = 0; i < voisin[x].size(); i++){
@@ -131,7 +123,6 @@ void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
                 cout << "y : " << y << endl;
                 int l = longueur(x, y, point);
                 cout << "d[y] avant " << d[y] << endl;
-                //cout << "l " << l << endl;
                 if((traite[y] == 0) && (d[y] > d[x] + l)){ /* x est un raccourci pour atteindre y */
                     d[y] = d[x] + l;
                     cout << "d[y] apres " << d[y] << endl;
@@ -142,17 +133,16 @@ void dijkstra(int n, vector<int> voisin[], coord point[], int pere[]){
     }
 }
 
+/* Remplit le tableau arbre avec toutes les arêtes ipere[i]. */
 void construireArbre(int n, int arbre[][2], int pere[]){
-
     int k = 0; // Zero voisins
 
-    for(int i =0;i<n;i++){
+    for(int i = 0; i < n; i++){
         if(pere[i] > -1){
             arbre[i][0] = i;
             arbre[i][1] = pere[i];
             k++;
         }
-
     }
 }
 
@@ -171,19 +161,17 @@ int main(){
     int arbre[n-1][2];       // Les aretes de l'arbre de Dijkstra.
     int pere[n];             // La relation de filiation de l'arbre de Dijkstra.
 
+    pointrandom(n, point); /* Exercice 1 */
     voisins(n, dmax, point, voisin);
-    pointrandom(n, point);
+    //AffichageGraphe(n, point, voisin); /* Exercice 2 */
 
-    dijkstra(n, voisin, point, pere);
-    construireArbre(n,arbre,pere);
-    //AffichageGraphe(n, point, voisins);
-    //AffichageGraphiqueArbre(n, point, arbre);
-
+    dijkstra(n, voisin, point, pere); /* Exercice 3 */
+    construireArbre(n, arbre, pere); /* Exercice 4 */
+    AffichageGraphiqueArbre(n, point, arbre); /* Exercice 5 */
 
     for(int i = 0; i < n; i++){
         if(pere[i] != -1){
             cout << "Père de " << i << ": " << pere[i] << endl;
-            cout << "Distance de " << i << "à la racine : " << d[i] << endl;
         }
     }
     return 0;
