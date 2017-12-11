@@ -4,9 +4,11 @@
 
 using namespace std;
 
-const int n = 6;//5 pour le début; //6 pour la fermeture transitive
+const int n = 6;//5 pour le début; //6 pour la fermeture transitive //100 pour l'Exercice 7
 const int inf=9999;                    //La valeur infinie.
 
+/* Construit le tableau dist dont chaque entrée dist[i][j] est la longueur minimale d'un chemin de i à j, et vaut inf si un tel chemin n'existe pas.
+* Complexité : O(n³) */
 void floyd_warshall(int longueur[][n], int dist[][n], int chemin[n][n]){
 
   /* Initialisation */
@@ -74,6 +76,8 @@ void floyd_warshall(int longueur[][n], int dist[][n], int chemin[n][n]){
   }
 }
 
+/* Affiche un plus court chemin de i à j.
+* Complexité : O(1) */
 void itineraire(int i, int j, int chemin[][n]){
   if(chemin[i][j] != -1){
     if(i == chemin[i][j] || j == chemin[i][j]){
@@ -88,20 +92,22 @@ void itineraire(int i, int j, int chemin[][n]){
   }
 }
 
-void fermeture_transitive(int arc[][n],int fermeture[][n]){
+/* Calcule la tableau fermeture, le tableau arc étant la matrice d'adjacence d'un graphe orienté.
+* Complexité : O(n³) */
+void fermeture_transitive(int arc[][n], int fermeture[][n]){
 
   // Initialisation
   for(int i = 0; i < n; i++){
-    for(int j=0; j < n; j++){
+    for(int j = 0; j < n; j++){
       fermeture[i][j] = arc[i][j]; // Il y a forcément un chemin entre les sommets reliés de le matrice arc
     }
   }
 
-  for(int k=0; k < n; k++){
-    for(int i=0; i < n; i++){
-      for(int j=0; j < n; j++ ){
+  for(int k = 0; k < n; k++){
+    for(int i = 0; i < n; i++){
+      for(int j = 0; j < n; j++){
         // Si fermeture[i][j] initialisé à 1, fermeture_transitive[i][j] reste 1.
-        // Si fermeture[i][j] initialisé à 0 MAIS qu'il existe (fermeture[i][k] == 1) ET(fermeture[k][j] == 1)  alors fermeture[i][j] devient 1
+        // Si fermeture[i][j] initialisé à 0 MAIS qu'il existe (fermeture[i][k] == 1) ET (fermeture[k][j] == 1)  alors fermeture[i][j] devient 1
           fermeture[i][j] = fermeture[i][j] || (fermeture[i][k] && fermeture[k][j]);
         }
     }
@@ -118,6 +124,8 @@ void fermeture_transitive(int arc[][n],int fermeture[][n]){
   cout << endl;
 }
 
+/* Tire un graphe orienté sur 100 sommets.
+* Complexité : O(n) */
 void graphe_oriente_random(int n, int longueur[][100]){
   srand(time(NULL)); int voisin1, voisin2;
   for(int i = 0; i < n; i++){
@@ -131,6 +139,7 @@ void graphe_oriente_random(int n, int longueur[][100]){
   }
 }
 
+/* Affiche les composantes fortement connexes du graphe. */
 void compfortconnexe(int fermeture[][n]){
     vector<int> comp[n];
     //int comp[n];
@@ -139,23 +148,22 @@ void compfortconnexe(int fermeture[][n]){
     }
 
     for(int i = 0; i < n; i++){
-        for(int j = 0; j <n;j++){
+        for(int j = 0; j < n; j++){
             if(fermeture[i][j] && fermeture[j][i] && i!=j){
                 while(!comp[i].empty()){
                     int aux = comp[i].back();
                     comp[j].push_back(aux);
                     comp[i].pop_back();
-
                 }
             }
         }
     }
 
     cout << "Composantes fortement connexes : {";
-    for(int i =0; i < n;i++){
-        if(comp[i].size() !=0){
+    for(int i = 0; i < n; i++){
+        if(comp[i].size() != 0){
             cout << "{";
-            for(int j =0; j < comp[i].size();j++){
+            for(int j = 0; j < comp[i].size(); j++){
                 cout << comp[i][j];
                 if(comp[i][j+1]){
                     cout << ",";
@@ -168,7 +176,6 @@ void compfortconnexe(int fermeture[][n]){
         }
     }
     cout << "}" << endl;
-
 }
 
 int main(){
